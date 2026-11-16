@@ -1,0 +1,6 @@
+.env
+.env.local
+.vscode/
+#Системный мусор
+.DS_Store
+Thumbs.db
