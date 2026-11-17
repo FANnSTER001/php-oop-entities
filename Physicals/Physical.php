@@ -9,6 +9,15 @@ if (file_exists($entity)) {
     echo "Ошибка в форматировании адреса";
 }
 
+$tractor = $dirName . "/Equipments/Tractor.php";
+
+if (file_exists($tractor)) {
+    require_once($tractor);
+    echo "\nФайл |{$tractor}| подключен!\n";
+} else {
+    echo "Ошибка в форматировании адреса";
+}
+
 /**
  * Абстрактный базовый класс для всех физических объектов в системе
  * Расширяет базовую сущность (Entity), добавляя понятие "износа" (wear)
@@ -52,7 +61,7 @@ abstract class Physical extends Entity
     }
 
     /**
-     * Контракт: любой физический объект должен уметь прикрепляться к другому.
+     * Контракт: Трактор должен уметь прикрепляться к другому.
      */
-    abstract public function attachTo(Physical $physical): Physical;
+    abstract public function attachTo(Tractor $tractor): Physical;
 }
