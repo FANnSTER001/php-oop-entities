@@ -67,7 +67,7 @@ final class Cow extends Biological implements FeedableInterface
         $this->health = min(100.0, $this->health + 2.0);
     }
 
-    #[\\Override]
+    #[\Override]
     protected function handleDeath(): void
     {
         echo "Животное с ID:{$this->id} отправлено на колбасу\n";
