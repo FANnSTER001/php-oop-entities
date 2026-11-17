@@ -4,26 +4,30 @@ require_once __DIR__ . '/Biologicals/Biological.php';
 require_once __DIR__ . '/Physicals/Physical.php';
 
 //Создаем экземпляр анонимного класса-наследника Biological
-//Так как Biological абстрактный, мы обязаны реализовать метод handleDeath(),
-//иначе PHP выдаст фатальную ошибку при попытке создать объект
 $plant = new class('plant-1', 'Пшеница') extends Biological {
     protected function handleDeath(): void
     {
-        //Специфичная логика смерти для растения
-        //Используем getName() из базового класса Entity, соблюдая инкапсуляцию
-        echo "Растение {$this->getName()} погибло.\n";
+        // Специфичная логика смерти для растения
+        echo "Растение {$this->name} погибло.\n";
     }
 };
+
 //Создаем экземпляр анонимного класса-наследника Physical
-$tractor = new class('tractor-1', 'Трактор', 3500.0) extends Physical {};
+$tractor = new class('tractor-1', 'Трактор', 3500.0) extends Physical {
+    public function attachTo(Physical $physical): Physical {
+        return $this; // Заглушка
+    }
+};
 
-// Проверяем геттеры (свойства $id и $name из Entity)
-echo "Биологический объект: {$plant->getName()}, здоровье: {$plant->getHealth()}\n";
+// Проверяем геттеры
+echo "Биологический объект: {$plant->name}, здоровье: {$plant->health}\n";
+echo "\n--- Наносим урон растению (-60.0) ---\n";
+$plant->changeHealth(-60.0); 
 
-// Проверяем бизнес-логику изменения здоровья
-// Метод changeHealth() должен корректно отработать мин/макс лимиты (от 0 до 100)
-$plant->changeHealth(-25.0); // Наносим урон
-echo "Здоровье после изменения: {$plant->getHealth()}\n";
+//Проверяем, что здоровье изменилось
+echo "Здоровье после изменения: {$plant->health}\n";
+//Проверяем виртуальное свойство (если бы оно было в Biological)
+//echo "Растение здорово? " . ($plant->health > 50 ? 'Да' : 'Нет') . "\n";
 
-// Проверяем физический объект
-echo "Физический объект: {$tractor->getName()}, вес: {$tractor->getWeight()} кг\n";
+//Проверяем физический объект
+echo "\nФизический объект: {$tractor->name}, вес: {$tractor->weight} кг\n";
