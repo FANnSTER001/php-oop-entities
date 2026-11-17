@@ -1,6 +1,5 @@
 <?php
 //Блок подключения зависимостей
-
 $dirName = __DIR__;
 $entity = $dirName . "/../Entity.php";
 
@@ -9,24 +8,18 @@ if(file_exists($entity)){
     echo "\nФайл |{$entity}| подключен!\n";
 }else{
     //Если родительского класса нет, дальше код работать не будет
-    //Идеально было бы кинуть исключение, но пока просто выводим текст
     echo "ошибка в форматировании адреса";
 }
-
 abstract class Biological extends Entity
 {
-    //По умолчанию все биологические существа рождаются с полным здоровьем
-    protected float $health = 100.0;
+    //Снаружи (public) можно только ЧИТАТЬ здоровье
+    //Менять (set) можно только внутри этого класса или наследников
+    public protected(set) float $health = 100.0;
 
-    public function getHealth(): float
-    {
-        return $this->health;
-    }
-
+    //Т.к. свойство public, снаружи можно просто писать $obj->health
     public function changeHealth(float $delta): void  
     {
         $this->health += $delta;
-        
         //Ограничиваем здоровье рамками от 0 до 100
         //max(0.0, ...) не дает уйти в минус, а min(100.0, ...) не дает превысить лимит
         $this->health = min(100.0, max(0.0, $this->health));
@@ -35,16 +28,11 @@ abstract class Biological extends Entity
         if($this->health === 0.0)
         {
             echo "Объект с ID:{$this->id} умер.";
-            
             //Вызываем абстрактный метод. Так как класс Biological абстрактный, 
             //он не знает, КАК именно умирает существо (может, падает, а может, взрывается)
             $this->handleDeath();
         }
     }
-
     //Абстрактный метод: "Эй, наследники, вы ОБЯЗАНЫ описать, что происходит при смерти!"
     abstract protected function handleDeath(): void;
-
 }
-
-//:3

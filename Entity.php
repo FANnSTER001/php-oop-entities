@@ -1,40 +1,29 @@
 <?php
 abstract class Entity {
-    //Базовые свойства любой сущности в нашей системе
-    protected string $id;
-    protected string $name;
-
-    public function __construct(string $id, string $name) {
-        //Используем сеттеры в конструкторе, чтобы валидация (проверка на пустоту) 
-        //срабатывала сразу при создании объекта, а не где-то потом
-        $this->setID($id);
-        $this->setName($name);
-    }
-
-    protected function setID(string $id): void {
-        $trimmed = trim($id);
-        //Защита от "пустых" ID (например, если передали одни пробелы)
-        if ($trimmed === '') {
-            throw new \InvalidArgumentException("ID не может быть пустым"); 
+    //Базовые публичные свойства, но с логикой внутри
+    public string $id {
+        set(string $value) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                throw new \InvalidArgumentException("ID не может быть пустым");
+            }
+            $this->id = $trimmed;
         }
-        //Сохраняем именно обрезанную версию, чтобы в базе не было лишних пробелов
-        $this->id = $trimmed; 
     }
 
-    public function getID(): string {
-        return $this->id; 
-    }
-
-    protected function setName(string $name): void {
-        $trimmed = trim($name);
-        if ($trimmed === '') {
-            throw new \InvalidArgumentException("Именование не может быть пустым"); 
+    public string $name {
+        set(string $value) {
+            $trimmed = trim($value);
+            if ($trimmed === '') {
+                throw new \InvalidArgumentException("Именование не может быть пустым");
+            }
+            $this->name = $trimmed;
         }
-        $this->name = $trimmed; 
     }
 
-    public function getName(): string {
-        return $this->name; 
+      public function __construct(string $id, string $name) {
+        $this->id = $id; //Магия хуков сама вызовет проверку и trim()
+        $this->name = $name; //И тут тоже
     }
 }
 
