@@ -8,7 +8,7 @@ final class Autoloader
 
     public function register(): void
     {
-        spl_autoload_register([$this, 'autoload']);
+        spl_autoload_register([$this, 'loadClass']);
     }
 
     // Регистрирует префикс пространства имен и соответствующий ему базовый каталог
