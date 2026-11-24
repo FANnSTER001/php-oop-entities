@@ -1,22 +1,8 @@
 <?php
-$dirName = __DIR__;
-$entity = $dirName . "/../Entity.php";
 
-if (file_exists($entity)) {
-    require_once($entity);
-    echo "\nФайл |{$entity}| подключен!\n";
-} else {
-    echo "Ошибка в форматировании адреса";
-}
+namespace Physicals;
 
-$tractor = $dirName . "/Equipments/Tractor.php";
-
-if (file_exists($tractor)) {
-    require_once($tractor);
-    echo "\nФайл |{$tractor}| подключен!\n";
-} else {
-    echo "Ошибка в форматировании адреса";
-}
+use Entity;
 
 /**
  * Абстрактный базовый класс для всех физических объектов в системе
@@ -33,14 +19,14 @@ abstract class Physical extends Entity
      * Используем Property Hooks для строгой инкапсуляции инварианта
      */
     public protected(set) float $wear = 0.0 {
-    set(float $value) {
-        if ($value < 0.0 || $value > 100.0) {
-            throw new \OutOfRangeException(message: "Износ может принимать значения от 0 до 100");
+        set(float $value) {
+            if ($value < 0.0 || $value > 100.0) {
+                throw new \OutOfRangeException(message: "Износ может принимать значения от 0 до 100");
+            }
+            //Явно указываем, что значение нужно сохранить в это же свойство
+            $this->wear = $value; 
         }
-        //Явно указываем, что значение нужно сохранить в это же свойство
-        $this->wear = $value; 
     }
-}
 
     /**
      * Конструктор физического объекта.
@@ -61,7 +47,8 @@ abstract class Physical extends Entity
     }
 
     /**
-     * Контракт: Трактор должен уметь прикрепляться к другому.
+     * Контракт: любой физический объект должен уметь прикрепляться к другому.
+     * Принимает базовый тип Physical (а не Tractor!).
      */
-    abstract public function attachTo(Tractor $tractor): Physical;
+    abstract public function attachTo(Physical $physical): Physical;
 }

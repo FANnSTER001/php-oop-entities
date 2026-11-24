@@ -1,4 +1,10 @@
 <?php
+
+namespace Biologicals;
+
+use Entity;
+
+
 //Блок подключения зависимостей
 $dirName = __DIR__;
 $entity = $dirName . "/../Entity.php";

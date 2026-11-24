@@ -1,5 +1,11 @@
 <?php
 
+namespace Biologicals\Animals;
+
+use Biologicals\Biological;
+use Contracts\FeedableInterface;
+
+
 $dirName = __DIR__;
 $biological = $dirName . "/../Biological.php";
 
@@ -33,7 +39,7 @@ final class Cow extends Biological implements FeedableInterface
             if($value <= 0.0){
                 throw new \InvalidArgumentException(message: "Вес - это положительная величина");
             }
-            //Сохранит возвращаемое значение автоматически
+             $this->weightKg = $value; 
         }
     }
     

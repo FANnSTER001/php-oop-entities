@@ -1,5 +1,7 @@
 <?php
 
+namespace Contracts;
+
 //Контракт для объектов, которые можно кормить
 interface FeedableInterface {
     //Метод кормления.
